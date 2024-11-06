@@ -1,8 +1,18 @@
 import Image from "next/image"
 import { Button } from "../_components/ui/button"
 import { LogInIcon } from "lucide-react"
+import { SignInButton } from "@clerk/nextjs"
+import { auth } from "@clerk/nextjs/server"
+import { redirect } from "next/navigation"
 
-const LoginPage = () => {
+const LoginPage = async () => {
+
+  const { userId} = await auth();
+
+  if(userId){
+    redirect('/');
+  }
+
   return (
    <div className="grid h-full grid-cols-2">  
     <div className="flex flex-col h-full justify-center p-8 max-w-[500px] mx-auto">
@@ -15,9 +25,14 @@ const LoginPage = () => {
       The Finance app is a plataform to manager your finance that use
        the AI to monitor your translations.
     </p>
+    
+    <SignInButton>
     <Button variant="outline">
       <LogInIcon className="mr-2"/>
-      Login</Button>
+      Login
+      </Button>
+    </SignInButton>
+
     </div>
     <div className=" relative h-full w-full">
     <Image src="/login-image.png" fill className="object-cover" alt="Finance app"/>

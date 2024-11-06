@@ -1,9 +1,9 @@
 import React from 'react'
-import { Button } from './_components/ui/button'
+import { UserButton } from '@clerk/nextjs'
 
 const Homepage = () => {
   return (    
-    <Button>Test button</Button>
+   <UserButton showName/>
   )
 }
 
