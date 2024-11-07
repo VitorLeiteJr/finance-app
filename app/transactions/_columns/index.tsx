@@ -9,6 +9,7 @@ import {
 } from "@/app/_constants/transactions";
 import { Button } from "@/app/_components/ui/button";
 import { TrashIcon } from "lucide-react";
+import EditTransactionButton from "../_components/edit-transactions-buttons";
 
 export const TransactionColumns: ColumnDef<Transaction>[] = [
   {
@@ -56,9 +57,10 @@ export const TransactionColumns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "actions",
     header: "",
-    cell: () => {
+    cell: ({ row: { original: transaction } }) => {
       return (
         <div className="space-x-1">
+          <EditTransactionButton transaction={transaction} />
           <Button variant="ghost" size="icon" className="text-muted-foreground">
             <TrashIcon />
           </Button>
