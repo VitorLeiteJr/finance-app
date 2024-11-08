@@ -1,10 +1,14 @@
-import React from 'react'
-import { UserButton } from '@clerk/nextjs'
+import React from "react";
+import { UserButton } from "@clerk/nextjs";
+import Navbar from "./_components/navbar";
 
 const Homepage = () => {
-  return (    
-   <UserButton showName/>
-  )
-}
+  return (
+    <>
+      <Navbar />
+      <UserButton showName />
+    </>
+  );
+};
 
 export default Homepage;
