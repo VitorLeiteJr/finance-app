@@ -11,22 +11,22 @@ const TransactionTypeBadge = ({ transaction }: TransactionTypeBadgeProps) => {
     return (
       <Badge className="bg-muted font-bold text-primary hover:bg-muted">
         <CircleIcon className="mr-2 fill-primary" size={10} />
-        Deposit
+        Depósito
       </Badge>
     );
   }
   if (transaction.type === TransactionType.EXPENSE) {
     return (
-      <Badge className="bg-muted font-bold text-destructive hover:bg-muted">
-        <CircleIcon className="mr-2 fill-destructive" size={10} />
-        Expense
+      <Badge className="font bold bg-danger text-danger bg-opacity-10">
+        <CircleIcon className="fill-danger mr-2" size={10} />
+        Despesa
       </Badge>
     );
   }
   return (
-    <Badge className="bg-muted font-bold text-white hover:bg-muted">
+    <Badge className="font bold bg-white bg-opacity-10 text-white">
       <CircleIcon className="mr-2 fill-white" size={10} />
-      Investment
+      Investimento
     </Badge>
   );
 };
