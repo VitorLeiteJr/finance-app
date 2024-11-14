@@ -2,7 +2,7 @@
 
 import { db } from "@/app/_lib/prisma";
 import { auth, clerkClient } from "@clerk/nextjs/server";
-import OpenAI from "openai";
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { GenerateAiReportSchema, generateAiReportSchema } from "./schema";
 
 const DUMMY_REPORT =
@@ -19,13 +19,12 @@ export const generateAiReport = async ({ month }: GenerateAiReportSchema) => {
   if (!hasPremiumPlan) {
     throw new Error("You need a premium plan to generate AI reports");
   }
-  if (!process.env.OPENAI_API_KEY) {
+  if (!process.env.GEMINI_API_KEY) {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     return DUMMY_REPORT;
   }
-  const openAi = new OpenAI({
-    apiKey: process.env.OPENAI_API_KEY,
-  });
+  const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY as string);
+  const model = gemini.getGenerativeModel({ model: "gemini-1.5-flash" });
   // pegar as transações do mês recebido
   const transactions = await db.transaction.findMany({
     where: {
@@ -43,20 +42,10 @@ export const generateAiReport = async ({ month }: GenerateAiReportSchema) => {
         `${transaction.date.toLocaleDateString("pt-BR")}-R$${transaction.amount}-${transaction.type}-${transaction.category}`,
     )
     .join(";")}`;
-  const completion = await openAi.chat.completions.create({
-    model: "gpt-4o-mini",
-    messages: [
-      {
-        role: "system",
-        content:
-          "Você é um especialista em gestão e organização de finanças pessoais. Você ajuda as pessoas a organizarem melhor as suas finanças.",
-      },
-      {
-        role: "user",
-        content,
-      },
-    ],
-  });
+
+  console.log(content);
+
+  const completion = await model.generateContentStream(content);
   // pegar o relatório gerado pelo ChatGPT e retornar para o usuário
-  return completion.choices[0].message.content;
+  return (await completion.response).text();
 };
